@@ -1,0 +1,48 @@
+# ============== #
+#  YOLO Project  #
+# ============== #
+
+# Model files (预训练模型和自己训练的模型)
+*.pt
+*.pth
+*.weights
+
+# Output directory from runs (运行预测或训练后生成的文件夹)
+runs/
+
+# Datasets and multimedia files (数据集、测试图片和视频)
+*.jpg
+*.jpeg
+*.png
+*.mp4
+*.avi
+*.mov
+
+# ==================== #
+#  Python Specific   #
+# ==================== #
+
+# Virtual Environments (虚拟环境文件夹)
+venv/
+.venv/
+yolo_env/
+env/
+
+# Python cache files (Python缓存文件)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ================= #
+#  Editor & OS    #
+# ================= #
+
+# VS Code specific
+.vscode/
+
+# macOS specific
+.DS_Store
+
+# Windows specific
+Thumbs.db
