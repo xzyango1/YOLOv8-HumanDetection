@@ -4,7 +4,7 @@ from PIL import Image
 import matplotlib.pyplot as plt
 
 # 加载模型（使用训练好的模型或预训练模型）
-model = YOLO('yolov8n.pt')  # 或 'best.pt'（如果你训练过）
+model = YOLO('best.pt')  # 或 'best.pt'（如果你训练过）
 
 # 设置输入源
 source = 'test_video.mp4' 

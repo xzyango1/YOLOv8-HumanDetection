@@ -1,48 +1,53 @@
-# ============== #
-#  YOLO Project  #
-# ============== #
+# ================================== #
+#  YOLOv8 Project - Professional   #
+# ================================== #
 
-# Model files (预训练模型和自己训练的模型)
+# --- Outputs & Models ---
+# 忽略所有训练/预测的输出文件夹
+runs/
+
+# 忽略所有模型文件（无论在哪个目录下）
 *.pt
 *.pth
 *.weights
 
-# Output directory from runs (运行预测或训练后生成的文件夹)
-runs/
+# --- Datasets ---
+# 明确地、完整地忽略整个数据集文件夹
+# 这是管理大型数据集的最佳实践
+datasets/
 
-# Datasets and multimedia files (数据集、测试图片和视频)
-*.jpg
-*.jpeg
-*.png
-*.mp4
-*.avi
-*.mov
+# --- Videos ---
+# 忽略整个视频文件夹
+videos/
 
-# ==================== #
-#  Python Specific   #
-# ==================== #
-
-# Virtual Environments (虚拟环境文件夹)
+# --- Python Specific ---
+# 忽略虚拟环境文件夹 (根据你的命名添加或修改)
 venv/
 .venv/
-yolo_env/
 env/
+# 如果你的conda环境在项目内，也加上它的名字
+yolo_env/
 
-# Python cache files (Python缓存文件)
+# 忽略Python缓存文件
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# ================= #
-#  Editor & OS    #
-# ================= #
-
-# VS Code specific
+# --- Editor & OS Specific ---
+# 忽略IDE和操作系统的配置文件
 .vscode/
-
-# macOS specific
+.idea/
 .DS_Store
-
-# Windows specific
 Thumbs.db
+
+# ======================================= #
+#  Track Specific Files (Advanced)      #
+# ======================================= #
+
+# --- 允许追踪特定的测试媒体文件 ---
+# 如果你想强制追踪根目录下的某个测试文件，
+# 即使它被之前的规则忽略了，可以使用'!'符号。
+# 例如，取消下面这行的注释来追踪 test_video.mp4
+# !test_video.mp4
+# !test_image.jpg
