@@ -1,63 +1,79 @@
-# YOLOv8 安全帽与人体检测项目 (教学版)
+# YOLOv8 安全帽与人体综合检测项目 (端到端教学版)
 
-欢迎来到这个YOLOv8实战项目！本项目旨在通过一个端到端的实践，带领学习者从零开始，最终训练出一个能够实时检测安全帽与人体的强大AI模型。
+![Project Banner](...) <!-- 建议在这里放一张您最终模型检测效果的酷炫截图或GIF -->
 
-**最终模型效果演示:**
-*（在这里放一张您最终模型检测视频的截图或GIF动图）*
+欢迎来到这个YOLOv8实战项目！本项目旨在通过一次完整的、端到端的实践，带领学习者从零开始，最终训练出一个能够实时、高精度地检测安全帽与人体的强大AI模型。
+
+这个仓库不仅是代码的集合，更是我个人从遇到问题、分析问题到最终解决问题的完整学习路径的记录。希望能对你的AI学习之旅有所启发和帮助！
 
 ---
 
-## 项目背景
+## 🌟 项目亮点
 
-本项目源于一次完整的AI模型开发学习之旅。我们从一个只能检测头部的基础模型开始，通过数据融合、模型升级和参数调优，最终解决了一系列真实世界中的技术挑战（如数据不平衡、硬件限制、过拟合等），打造出了一个高性能的V2.0终极模型。
+*   **端到端全流程**：涵盖了从建立性能基线、数据工程、硬件调试，到最终模型训练与实时应用开发的全过程。
+*   **解决真实世界问题**：聚焦于解决`person`类别检测失败这一典型的数据不平衡问题。
+*   **专业的工程实践**：项目采用了**数据融合**、**标签重映射**、**早停机制（Early Stopping）**等一系列行业标准技术。
+*   **详尽的文档**：提供了完整的环境配置指南和代码说明，旨在让学习者能够轻松复现。
 
-## 主要学习路径
+---
 
-这个项目仓库记录了以下关键的学习步骤：
-1.  **V1.0 基线模型**: 使用`yolov8n`在单一数据集上进行快速训练，建立性能基准。
-2.  **数据工程**: 融合三个不同的公开数据集，并通过脚本自动化地进行标签重映射和文件合并。
-3.  **硬件与环境调试**: 解决了在Windows上进行大规模训练时常见的CUDA、内存溢出和过热降频问题。
-4.  **V2.0 终极模型**: 使用`yolov8x`在最终的大规模数据集上，通过智能的早停机制，进行了一次高效且成功的训练。
-5.  **实时应用开发**: 最终将训练好的模型封装成一个可以调用电脑摄像头的实时检测程序。
+## 🚀 如何开始？
 
-## 如何使用本项目？
-
-**1. 克隆仓库**
+### 1. 克隆仓库
 ```bash
-git clone [您的仓库HTTPS链接]
+git clone https://github.com/xzyango1/YOLOv8-HumanDetection.git
 cd YOLOv8-HumanDetection
 ```
 
-**2. 创建并激活Conda环境**
+### 2. 环境配置
+推荐使用Conda进行环境管理。
 ```bash
+# 创建并激活Conda环境
 conda create -n yolo_env python=3.9
 conda activate yolo_env
-```
 
-**3. 安装依赖**
-```bash
+# 安装所有基础依赖
 pip install -r requirements.txt
-# 特别注意：请根据您的NVIDIA显卡型号，安装对应的GPU版本的PyTorch
-# 例如，对于CUDA 12.1:
+
+# 安装与您显卡匹配的GPU版PyTorch (关键！)
+# 以下示例适用于CUDA 12.1，请根据您的NVIDIA驱动版本进行调整
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 ```
 
-**4. 下载数据集 (重要！)**
-本项目使用的数据集来自Roboflow Universe。由于数据集过于庞大，并未包含在仓库中。请从以下链接下载，并按照教程中的结构存放：
-*   数据集1: [链接]
-*   数据集2: [链接]
-*   数据集3: [链接]
+### 3. 下载数据集 (重要！)
+本项目的数据集过于庞大，并未包含在仓库中。请从以下链接下载，并参考`merge_and_verify.py`脚本中的路径，将它们解压到`datasets/`目录下。
 
-**5. 下载预训练模型**
-脚本会自动从Ultralytics官方下载所需的预训练模型 (`yolov8x.pt`等)。
+*   **数据集1 (头部安全)**: [Safety Helmet Dataset by andrewyolo](https://universe.roboflow.com/andrewyolo/safety-helmet-wqidg)
+*   **数据集2 (头部安全)**: [Safety Helmet by mohammad-mehdi-tamehri](https://universe.roboflow.com/mohammad-mehdi-tamehri/safety-helmet-itjyo)
+*   **数据集3 (人体)**: [Human by human-urngn](https://universe.roboflow.com/human-urngn/human-wg4jz)
 
-**6. 运行代码！**
-*   **训练模型**: 查看并运行 `train.py`。
-*   **测试模型**: 查看并运行 `predict.py`。
-*   **实时应用**: 查看并运行 `realtime_app.py`。
+### 4. 运行项目！
+*   **数据准备**: 仔细阅读并运行 `remap_labels.py` 和 `merge_and_verify.py`，以创建最终的数据集。
+*   **模型训练**: 修改并运行 `train.py` 来开始你自己的训练。
+*   **模型测试**: 使用 `predict.py` 来测试已训练好的模型。
+*   **实时应用**: 运行 `realtime_app.py`，调用你的摄像头，见证实时检测的威力！
+
+---
+
+## 📜 项目文件结构说明
+
+```
+.
+├── datasets/               # (需手动创建) 存放所有数据集
+├── runs/                   # (自动生成) 存放所有训练和预测结果
+├── .gitignore              # Git忽略配置，防止上传大数据
+├── merge_and_verify.py     # 自动化合并与验证数据集的脚本
+├── predict.py              # 使用训练好的模型进行预测的脚本
+├── README.md               # 项目说明文档 (就是你正在看的这个!)
+├── realtime_app.py         # 实时摄像头检测的应用脚本
+├── remap_labels.py         # 自动化重映射数据集标签的脚本
+├── requirements.txt        # 项目Python依赖库
+└── train.py                # 训练模型的脚本
+```
 
 ## 致谢
+*   感谢 **Ultralytics** 团队开发的YOLOv8框架。
+*   感谢 **Roboflow Universe** 社区及所有无私分享数据集的贡献者。
 
-感谢Ultralytics团队开发的YOLOv8框架，以及Roboflow Universe上无私分享数据集的社区成员。
-
-希望这个项目能对你的学习之旅有所帮助！
+---
+*由 xzyango1 创建与维护*

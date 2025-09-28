@@ -5,7 +5,7 @@ from ultralytics import YOLO
 
 # 1. 加载我们训练好的、最强大的V2.0终极模型
 # 确保这个路径是正确的！
-model_path = 'D:/VScode Project/YOLOv8-HumanDetection/runs/detect/ultimate_model_aggressive_v28/weights/best.pt'
+model_path = "D:/VScode Project/YOLOv8-HumanDetection/runs/detect/ultimate_model_aggressive_v28/weights/best.pt"
 model = YOLO(model_path)
 
 # 2. 打开电脑的默认摄像头 (摄像头ID通常为0)
