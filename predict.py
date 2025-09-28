@@ -1,16 +1,39 @@
+import argparse
+from pathlib import Path
 from ultralytics import YOLO
 
-if __name__ == "__main__":
-    # --- 核心：加载我们最新、最强大的V2.0终极模型 ---
-    model_path = "D:/VScode Project/YOLOv8-HumanDetection/runs/detect/ultimate_model_aggressive_v28/weights/best.pt"
+def predict(model_path, source_path, conf_threshold):
+    """
+    使用指定的模型对源文件进行预测。
+    """
+    model_file = Path(model_path)
+    source_file = Path(source_path)
+
+    if not model_file.exists():
+        print(f"❌ 错误: 模型文件不存在 -> {model_path}")
+        return
+    if not source_file.exists():
+        print(f"❌ 错误: 源文件/目录不存在 -> {source_path}")
+        return
+        
+    print(f"🔍 加载模型 '{model_path}'...")
     model = YOLO(model_path)
+    
+    print(f"🚀 开始对 '{source_path}' 进行预测...")
+    results = model.predict(source=source_path, save=True, conf=conf_threshold)
+    
+    # 打印结果的保存路径
+    if isinstance(results, list):
+        print(f"✅ 预测完成！结果保存在: {results[0].save_dir}")
+    else:
+        print("✅ 预测完成！")
 
-    # --- 指定一个您之前测试过的、V1.0模型表现不佳的视频 ---
-    # 最好是一个包含很多全身人物的视频
-    source_path = "videos/广州街拍.mp4"
 
-    # --- 运行预测 ---
-    # 我们可以稍微提高置信度，因为这个模型更强大
-    results = model.predict(source=source_path, save=True, conf=0.3)
-
-    print(f"\n终极模型预测完成！结果已保存到: {results[0].save_dir}")
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="YOLOv8 模型预测脚本")
+    parser.add_argument('--model', type=str, required=True, help="指向.pt模型文件的路径")
+    parser.add_argument('--source', type=str, required=True, help="指向待预测的图片或视频文件")
+    parser.add_argument('--conf', type=float, default=0.5, help="检测结果的置信度阈值")
+    args = parser.parse_args()
+    
+    predict(args.model, args.source, args.conf)

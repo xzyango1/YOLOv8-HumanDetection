@@ -1,21 +1,26 @@
+import argparse
 from ultralytics import YOLO
 
-if __name__ == "__main__":
-    model = YOLO("yolov8x.pt")
+def train_model(data_config_path):
+    """
+    根据指定的数据集配置文件加载预训练模型并开始训练。
+    训练参数（如epochs, batch等）也应定义在YAML文件中。
+    """
+    # 使用yolov8x作为预训练模型起点
+    model = YOLO('yolov8x.pt') 
+    
+    print(f"📄 使用配置文件 '{data_config_path}' 开始训练...")
+    results = model.train(data=data_config_path)
+    print(f"✅ 训练完成！结果保存在: {results.save_dir}")
 
-    results = model.train(
-        data="datasets/ULTIMATE_DATASET/data.yaml",
-        # --- 激进的性能参数 ---
-        epochs=100,  # 总轮次
-        patience=25,  # 耐心，多轮次无提升则停止训练，一般在总论次的1/4到1/3之间
-        imgsz=640,  # 暂时保持640
-        # --- 内存与显存配置 ---
-        batch=4,  # 8GB显存对散热系统负载过大，改为4
-        workers=8,  # 线程数量
-        cache=False,  # 尝试将数据集缓存到内存中以加速训练！
-        # --- 其他高级参数 ---
-        optimizer="AdamW",  # 显式指定一个优秀的优化器
-        name="ultimate_model_aggressive_v2",  # 为这次豪华版训练起个新名字
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="YOLOv8 模型训练脚本")
+    parser.add_argument(
+        '--config', 
+        type=str, 
+        default='configs/datasets/ultimate_dataset.yaml', 
+        help="指向数据集和训练参数的.yaml配置文件路径"
     )
-
-    print("训练已完成！")
+    args = parser.parse_args()
+    
+    train_model(args.config)
