@@ -3,9 +3,6 @@
 <div align="center">
   <img src="assets/demo.gif" width="80%">
 </div>
-
-*⚠️【请在此处替换为您自己录制的、展示`realtime_app.py`运行效果的GIF动图！确保已将`demo.gif`文件放入`assets`目录。】*
-
 ---
 
 ## 📖 项目简介
