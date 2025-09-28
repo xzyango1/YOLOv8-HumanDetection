@@ -1,6 +1,5 @@
-# YOLOv8 安全帽与人体综合检测项目 (端到端教学版)
-
-![Project Banner](...) <!-- 建议在这里放一张您最终模型检测效果的酷炫截图或GIF -->
+# YOLOv8 安全帽与人体检测项目
+![项目演示GIF](assets/demo.gif)
 
 欢迎来到这个YOLOv8实战项目！本项目旨在通过一次完整的、端到端的实践，带领学习者从零开始，最终训练出一个能够实时、高精度地检测安全帽与人体的强大AI模型。
 
@@ -8,72 +7,147 @@
 
 ---
 
-## 🌟 项目亮点
+## 📖 项目学习路线图
 
-*   **端到端全流程**：涵盖了从建立性能基线、数据工程、硬件调试，到最终模型训练与实时应用开发的全过程。
-*   **解决真实世界问题**：聚焦于解决`person`类别检测失败这一典型的数据不平衡问题。
-*   **专业的工程实践**：项目采用了**数据融合**、**标签重映射**、**早停机制（Early Stopping）**等一系列行业标准技术。
-*   **详尽的文档**：提供了完整的环境配置指南和代码说明，旨在让学习者能够轻松复现。
+本项目被精心设计为一条循序渐进的学习路径。请严格按照以下步骤进行，你将能100%复现本项目的全部成果：
+
+*   **第零步：环境搭建** - 配置一个稳定、高效的深度学习环境。
+*   **第一步：数据准备** - 学习如何融合多个数据集，并创建一个庞大的、高质量的训练集。
+*   **第二步：模型训练** - 使用我们准备好的数据集，从零开始训练一个强大的`yolov8x`模型。
+*   **第三步：模型测试** - 学习如何评估你训练出的模型，并用它来分析图片和视频。
+*   **第四步：实时应用** - 将你的模型封装成一个可以调用电脑摄像头的实时检测程序，见证AI的力量！
 
 ---
 
-## 🚀 如何开始？
+## 🛠️ 第零步：环境搭建
 
-### 1. 克隆仓库
+在开始之前，我们需要为项目配置一个独立的Python环境，以避免与你电脑上其他的项目产生冲突。
+
+### 1. 安装Conda
+如果你还没有安装Conda，请先从官网下载并安装 [Anaconda](https://www.anaconda.com/products/distribution) 或 [Miniconda](https://docs.conda.io/en/latest/miniconda.html)。
+
+### 2. 创建并激活Conda环境
+打开你的终端（对于Windows用户，推荐使用Anaconda Prompt），然后逐行运行以下命令：
+
+```bash
+# 创建一个名为 yolo_env 的、使用Python 3.9 的新环境
+conda create -n yolo_env python=3.9
+
+# 激活这个新创建的环境
+conda activate yolo_env
+```
+*成功激活后，你的终端提示符前面会出现`(yolo_env)`的字样。*
+
+### 3. 克隆本项目仓库
 ```bash
 git clone https://github.com/xzyango1/YOLOv8-HumanDetection.git
 cd YOLOv8-HumanDetection
 ```
 
-### 2. 环境配置
-推荐使用Conda进行环境管理。
+### 4. 安装项目依赖
+本项目的所有依赖库都记录在`requirements.txt`中。
+
 ```bash
-# 创建并激活Conda环境
-conda create -n yolo_env python=3.9
-conda activate yolo_env
-
-# 安装所有基础依赖
+# 安装所有基础依赖库
 pip install -r requirements.txt
-
-# 安装与您显卡匹配的GPU版PyTorch (关键！)
-# 以下示例适用于CUDA 12.1，请根据您的NVIDIA驱动版本进行调整
-pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 ```
 
-### 3. 下载数据集 (重要！)
-本项目的数据集过于庞大，并未包含在仓库中。请从以下链接下载，并参考`merge_and_verify.py`脚本中的路径，将它们解压到`datasets/`目录下。
+### 5. 安装PyTorch (最关键的一步！)
+深度学习的核心计算库PyTorch需要根据你的硬件（有无NVIDIA显卡）进行单独安装。
+
+*   **如果你有NVIDIA显卡 (推荐)**：
+    请访问 [PyTorch官网](https://pytorch.org/get-started/locally/)，根据你电脑的CUDA版本，选择并复制对应的安装命令。以下示例适用于CUDA 12.1：
+    ```bash
+    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+    ```
+
+*   **如果你的电脑只有CPU**：
+    ```bash
+    pip3 install torch torchvision torchaudio
+    ```
+
+至此，你的开发环境已经完美配置完毕！
+
+---
+
+## 📦 第一步：数据准备
+
+一个强大的模型，离不开高质量、大规模的数据。在这个阶段，我们将学习如何将三个不同的数据集融合为一个终极数据集。
+
+### 1. 下载原始数据集
+本项目的数据集托管在[Roboflow Universe](https://universe.roboflow.com/)上。请分别从以下链接下载这三个数据集（选择`YOLOv8`格式导出）：
 
 *   **数据集1 (头部安全)**: [Safety Helmet Dataset by andrewyolo](https://universe.roboflow.com/andrewyolo/safety-helmet-wqidg)
 *   **数据集2 (头部安全)**: [Safety Helmet by mohammad-mehdi-tamehri](https://universe.roboflow.com/mohammad-mehdi-tamehri/safety-helmet-itjyo)
 *   **数据集3 (人体)**: [Human by human-urngn](https://universe.roboflow.com/human-urngn/human-wg4jz)
 
-### 4. 运行项目！
-*   **数据准备**: 仔细阅读并运行 `remap_labels.py` 和 `merge_and_verify.py`，以创建最终的数据集。
-*   **模型训练**: 修改并运行 `train.py` 来开始你自己的训练。
-*   **模型测试**: 使用 `predict.py` 来测试已训练好的模型。
-*   **实时应用**: 运行 `realtime_app.py`，调用你的摄像头，见证实时检测的威力！
+### 2. 组织文件结构
+在你的项目根目录下，新建一个`datasets`文件夹。将下载好的三个数据集解压到其中。
+
+### 3. 运行自动化准备脚本
+为了将不同来源的数据进行统一和合并，你需要**依次**运行`data_preparation/`目录下的两个脚本：
+
+```bash
+# 第一步：统一所有数据集的类别标签
+python data_preparation/remap_labels.py
+
+# 第二步：将所有数据集的文件合并，并进行数量验证
+python data_preparation/merge_and_verify.py
+```
+*运行成功后，你会在`datasets/`目录下得到一个名为`ULTIMATE_DATASET`的最终数据集文件夹。*
 
 ---
 
-## 📜 项目文件结构说明
+## 🧠 第二步：模型训练
 
-```
-.
-├── datasets/               # (需手动创建) 存放所有数据集
-├── runs/                   # (自动生成) 存放所有训练和预测结果
-├── .gitignore              # Git忽略配置，防止上传大数据
-├── merge_and_verify.py     # 自动化合并与验证数据集的脚本
-├── predict.py              # 使用训练好的模型进行预测的脚本
-├── README.md               # 项目说明文档 (就是你正在看的这个!)
-├── realtime_app.py         # 实时摄像头检测的应用脚本
-├── remap_labels.py         # 自动化重映射数据集标签的脚本
-├── requirements.txt        # 项目Python依赖库
-└── train.py                # 训练模型的脚本
-```
+现在，我们将使用准备好的终极数据集，来训练一个强大的`yolov8x`模型。
 
-## 致谢
+1.  **打开 `train.py` 文件。**
+2.  在文件顶部的“配置区”，你可以根据自己的需求调整训练参数（如`EPOCHS`训练轮次等）。对于初次尝试，建议保持默认设置。
+3.  **运行脚本开始训练：**
+    ```bash
+    python train.py
+    ```
+*这是一个漫长的过程，根据你的硬件，可能需要30小时以上。你可以随时按`Ctrl+C`提前中断，程序会自动保存当前最好的结果。*
+
+---
+
+## 📊 第三步：模型测试
+
+训练完成后，是时候检验我们成果了！
+
+1.  **找到你最好的模型**：训练结束后，你最好的模型权重会被保存在类似 `runs/detect/.../weights/best.pt` 的路径下。
+2.  **打开 `predict.py` 文件。**
+3.  在顶部的“配置区”，将`MODEL_PATH`的值，**精确地修改为你自己 `best.pt` 文件的完整路径**。
+4.  将`SOURCE_PATH`修改为你想要测试的一张图片或一段视频的路径（项目中`assets/`文件夹内已提供一个测试视频）。
+5.  **运行脚本进行预测：**
+    ```bash
+    python predict.py
+    ```
+*预测结果（带标注的图片/视频）会自动保存在一个新的`runs/detect/predict...`文件夹中，快去看看效果吧！*
+
+---
+
+## 🎥 第四步：实时应用
+
+最后，让我们把模型变成一个能与你实时互动的应用程序！
+
+1.  **打开 `realtime_app.py` 文件。**
+2.  和上一步一样，在顶部的“配置区”，**将`MODEL_PATH`的值，修改为你自己`best.pt`文件的路径**。
+3.  确保你的电脑摄像头没有被其他程序占用。
+4.  **运行实时检测程序：**
+    ```bash
+    python realtime_app.py
+    ```
+*一个窗口将会弹出，显示你摄像头的实时画面，并开始进行智能检测！按键盘上的`q`键可以退出程序。*
+
+---
+
+## 🤝 致谢
+
 *   感谢 **Ultralytics** 团队开发的YOLOv8框架。
 *   感谢 **Roboflow Universe** 社区及所有无私分享数据集的贡献者。
 
 ---
 *由 xzyango1 创建与维护*
+*希望这个项目能成为你AI学习路上的一个有趣且坚实的脚印！*

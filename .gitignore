@@ -10,11 +10,13 @@ runs/
 *.pt
 *.pth
 *.weights
+*.onnx
 
 # --- Datasets ---
 # 明确地、完整地忽略整个数据集文件夹
 # 这是管理大型数据集的最佳实践
 datasets/
+best-complete_saved_model/
 
 # --- Videos ---
 # 忽略整个视频文件夹
@@ -33,6 +35,7 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.npy
 
 # --- Editor & OS Specific ---
 # 忽略IDE和操作系统的配置文件
@@ -51,3 +54,5 @@ Thumbs.db
 # 例如，取消下面这行的注释来追踪 test_video.mp4
 # !test_video.mp4
 # !test_image.jpg
+!best-light.pt
+# !best-complete.pt

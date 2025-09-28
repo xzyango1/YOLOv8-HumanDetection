@@ -1,5 +1,5 @@
-# 项目核心依赖
-# 请注意：torch需要根据您的CUDA版本手动安装
-
+# requirements.txt (精简后)
+# 核心依赖库
+# 注意：torch需要用户根据自己的CUDA版本另行安装，请在README中说明。
 ultralytics
 opencv-python
