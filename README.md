@@ -3,6 +3,7 @@
 <div align="center">
   <img src="assets/demo.gif" width="80%">
 </div>
+原视频：https://www.bilibili.com/video/BV1sdKizVE2g
 
 ## 📖 项目简介
 
