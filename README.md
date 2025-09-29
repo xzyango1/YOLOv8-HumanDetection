@@ -4,6 +4,7 @@
   <img src="assets/demo.gif" width="80%">
 </div>
 *一个由本项目V2.0终极模型驱动的实时检测效果演示。*
+
 *原视频：https://www.bilibili.com/video/BV1sdKizVE2g*
 
 ## 📖 项目简介
