@@ -3,7 +3,6 @@
 <div align="center">
   <img src="assets/demo.gif" width="80%">
 </div>
----
 
 ## 📖 项目简介
 
@@ -124,7 +123,7 @@ python data_preparation/merge_and_verify.py
     ```bash
     python train.py
     ```
-*这是一个漫长的过程，根据硬件情况可能需要1-2天。你可以随时按`Ctrl+C`提前中断，程序会自动保存当前最好的结果。*
+*这是一个漫长的过程，根据硬件情况可能需要 数小时至数天 。你可以随时按`Ctrl+C`提前中断，程序会自动保存当前最好的结果。*
 
 ---
 
@@ -170,6 +169,11 @@ python data_preparation/merge_and_verify.py
     python quantize_model.py
     ```
 *这将生成一个体积更小、速度更快的`.onnx`格式的量化模型。*
+
+在运行此脚本前，请确保已安装所有必要的转换库。可以运行以下命令：
+    ```bash
+    pip install tensorflow-cpu onnx onnx-tf onnxruntime
+    ```
 
 ---
 

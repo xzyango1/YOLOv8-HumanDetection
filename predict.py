@@ -6,7 +6,8 @@ from pathlib import Path
 # 在这里修改所有预测参数
 
 # 1. 指向您训练好的、最好的模型权重文件 (.pt)
-MODEL_PATH = 'runs/detect/ultimate_model_aggressive_v28/weights/best.pt' # ⚠️ 请务必改为您最终的真实模型路径！
+# 例如: 'runs/detect/yolov8x_ultimate_data_100e_balanced/weights/best.pt'
+MODEL_PATH = 'runs/detect/YOUR_PROJECT_NAME/YOUR_EXPERIMENT_NAME/weights/best.pt' # ⚠️ 请务必改为您真实的模型路径！
 
 # 2. 指定您要进行预测的图片或视频文件路径
 SOURCE_PATH = 'assets/test_video.mp4'
@@ -34,7 +35,10 @@ def main():
     print(f"🚀 开始对 '{source_file.name}' 进行预测...")
     results = model.predict(source=source_file, save=True, conf=CONFIDENCE_THRESHOLD)
     
-    print(f"✅ 预测完成！结果已保存在最新的 'runs/detect/predict' 文件夹中。")
+    if results and hasattr(results[0], 'save_dir') and results[0].save_dir:
+        print(f"✅ 预测完成！结果已保存在: {results[0].save_dir}")
+    else:
+        print("✅ 预测完成！但未能获取到保存路径。请检查 'runs/detect/' 目录。")
 
 if __name__ == '__main__':
     main()

@@ -3,7 +3,7 @@ import os
 
 def remap_class_ids(labels_dir, id_mapping):
     if not os.path.isdir(labels_dir):
-        print(f"错误：目录不存在 -> {labels_dir}")
+        print(f"⚠️ 警告: 目录不存在，跳过处理 -> {labels_dir}")
         return
     print(f"开始处理目录: {labels_dir}...")
     for filename in os.listdir(labels_dir):
