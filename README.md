@@ -1,4 +1,4 @@
-# YOLOv8 安全帽与人体检测项目 (保姆级教学版)
+# YOLOv8 安全帽与人体检测项目
 
 <div align="center">
   <img src="assets/demo.gif" width="80%">
