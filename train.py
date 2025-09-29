@@ -5,17 +5,17 @@ from ultralytics import YOLO
 # 在这里修改所有训练参数，而无需使用命令行
 
 # 1. 数据集配置文件路径 (YAML)
-#    这个文件里定义了数据集的位置、类别等信息。
-DATA_CONFIG_PATH = 'datasets/ULTIMATE_DATASET/data.yaml' # 假设您的数据集yaml在此
+#    这就像是训练的“地图”，告诉程序去哪里找数据。通常你不需要修改它。
+DATA_CONFIG_PATH = 'datasets/ULTIMATE_DATASET/data.yaml'
 
-# 2. 训练参数
-EPOCHS = 100 # 训练轮数
-BATCH_SIZE = 4 # 每个批次的图片数量 (根据显存调整，显存大可适当调大)
-PATIENCE = 25 # 早停法：如果在这么多轮内验证集指标没有提升，则提前结束训练
-WORKERS = 8 # 数据加载的线程数 (根据CPU核数调整)
-DEVICE = 1  # 0代表使用第一个GPU,以此类推； 如果想用CPU, 则写 'cpu'。 通常电脑有核显（性能弱）和独立显卡（性能强），请确保选择性能强的显卡。
-PROJECT_NAME = 'YOLOv8-Safety-Helmet-and-Person' # 训练结果将保存在 runs/detect/PROJECT_NAME 目录下
-EXPERIMENT_NAME = 'yolov8x_ultimate_data_100e_balanced' # 本次训练的具体名称
+# 2. 训练参数 (这里是你“炼丹”的地方)
+EPOCHS = 100         # 你想让模型学习多少轮？100轮是一个很好的起点。
+BATCH_SIZE = 4       # 一次“喂”给显卡几张图片。如果显存小，就调低这个值，显存大可适当调大。
+PATIENCE = 25        # 如果连续25轮都没进步，就智能地提前停止，为你节省时间，通常设为总轮数的20%-30%。
+WORKERS = 8          # “工人”数量，帮你准备数据。通常设为CPU核心数的一半即可。
+DEVICE = 0           # 使用哪块显卡。0代表第一块。如果想用CPU，就写 'cpu'。用GPU训练会快很多，一般电脑GPU区分为核显（性能弱）和独显（性能强），注意选择性能强的显卡。
+PROJECT_NAME = 'My_YOLOv8_Journey' # 所有训练的总项目名
+EXPERIMENT_NAME = 'exp_01_yolov8x_100e' # 本次训练的具体名称
 
 # --- 核心执行区 ---
 
@@ -24,7 +24,8 @@ def main():
     print("--- 开始模型训练 ---")
     
     # 加载预训练模型
-    model = YOLO('yolov8x.pt')
+    model = YOLO('yolov8x.pt') # 你也可以换成 'yolov8n.pt', 'yolov8s.pt', 'yolov8m.pt', 'yolov8l.pt' 从‘n'ano到‘x’逐渐变大变强, 但也更占显存和更慢
+    print(f"模型 '{model.model_name}' 已加载。")
 
     # 开始训练
     model.train(

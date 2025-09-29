@@ -12,7 +12,7 @@ MODEL_PATH = 'runs/detect/YOUR_PROJECT_NAME/YOUR_EXPERIMENT_NAME/weights/best.pt
 # 2. 指定您要进行预测的图片或视频文件路径
 SOURCE_PATH = 'assets/test_video.mp4'
 
-# 3. 设置置信度阈值 (只显示高于此分数的检测结果)
+# 3. 设置置信度阈值 (只显示高于此分数的检测结果，范围0-1，建议0.25-0.5之间)
 CONFIDENCE_THRESHOLD = 0.3
 
 # --- 核心执行区 ---

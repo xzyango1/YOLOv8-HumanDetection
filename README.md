@@ -68,17 +68,21 @@ pip install -r requirements.txt
 ```
 
 ### 5. 安装PyTorch (最关键的一步！)
-深度学习的核心计算库PyTorch需要根据你的硬件（有无NVIDIA显卡）进行单独安装。
 
-*   **如果你有NVIDIA显卡 (推荐)**：
-    请访问 [PyTorch官网](https://pytorch.org/get-started/locally/)，根据你电脑的CUDA版本，选择并复制对应的安装命令。以下示例适用于CUDA 12.1：
+深度学习的核心计算库PyTorch需要根据你的硬件进行单独安装。
+
+*   **选项A：如果你有NVIDIA显卡 (极推荐)**：
+    这是释放项目全部性能的关键。请访问 [PyTorch官网](https://pytorch.org/get-started/locally/)，网站会自动检测你的系统，并为你生成最适合的安装命令。通常你只需在网站上选择 `Stable` -> `Windows` -> `Pip` -> `Python` -> `CUDA ...`，然后复制粘贴网站生成的命令即可。
+    
+    *一个常见的适用于CUDA 12.1的命令示例：*
     ```bash
-    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+    pip3 install torch torchvision torchiudio --index-url https://download.pytorch.org/whl/cu121
     ```
 
-*   **如果你的电脑只有CPU**：
+*   **选项B：如果你的电脑只有CPU，或GPU安装失败 (仅保证运行)**：
+    如果你不确定自己的显卡配置，或者GPU版本安装失败，不用担心！CPU版本虽然速度较慢，但**保证可以运行**本项目的所有代码。
     ```bash
-    pip3 install torch torchvision torchaudio
+    pip3 install torch torchvision torchiudio
     ```
 
 至此，你的开发环境已经完美配置完毕！
@@ -104,7 +108,8 @@ pip install -r requirements.txt
 
 ```bash
 # 第一步：统一所有数据集的类别标签
-# (请先根据你自己的文件夹名，修改脚本内的SOURCE_DATASETS列表)
+# ⚠️ 在运行前，请务必用VS Code打开 data_preparation/remap_labels.py 文件，
+# 找到顶部的“配置区”，将其中的文件夹名修改为你自己解压后得到的名字。
 python data_preparation/remap_labels.py
 
 # 第二步：将所有数据集的文件合并，并进行数量验证
@@ -116,15 +121,17 @@ python data_preparation/merge_and_verify.py
 
 ## 🧠 第二步：模型训练
 
-现在，我们将使用准备好的终极数据集，来训练一个强大的`yolov8x`模型。
+现在，我们将使用准备好的终极数据集，来训练一个强大的`yolov8x`（默认）模型。
 
 1.  **打开 `train.py` 文件。**
-2.  在文件顶部的“配置区”，你可以根据自己的需求调整训练参数（如`EPOCHS`训练轮次等）。对于初次尝试，建议保持默认设置。
+2.  在文件顶部的“配置区”，你可以根据自己的需求调整训练参数（如`EPOCHS`训练轮次等）。对于初次尝试，如果没有完全理解各个配置，建议保持默认设置。
 3.  **运行脚本开始训练：**
     ```bash
     python train.py
     ```
-*这是一个漫长的过程，根据硬件情况可能需要 数小时至数天 。你可以随时按`Ctrl+C`提前中断，程序会自动保存当前最好的结果。*
+*这是一个漫长的“挂机”任务，你可以启动训练后，就去睡觉或者做别的事情。根据你的硬件，完整的100轮训练大约需要1-2天。通常模型会在这之前完成收敛，并在设置的第"PATIENCE"次训练无提升后结束训练，因此实际训练时长通常短于这一预测值。
+**非常重要**：你不需要一次性跑完！可以随时在终端按`Ctrl+C`来中断训练，程序会自动保存当前为止最好的模型。即使只训练几个小时，你也能得到一个效果不错的模型！*
+*第一次训练也可以使用`yolov8n`小模型，`5000`张图片的数据集（如只加载第一个链接所述数据集，这样可以暂时跳过数据集合并步骤），以快速验证配置可行性并得到一个效果尚可的安全帽识别模型，训练时长将约1小时以内*
 
 ---
 
