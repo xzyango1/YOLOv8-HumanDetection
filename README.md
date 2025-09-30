@@ -262,6 +262,455 @@ python data_preparation/merge_and_verify.py
     pip install tensorflow-cpu onnx onnx-tf onnxruntime
     ```
 
+
+# 📋 常见问题 FAQ
+
+## 🔧 环境配置问题
+
+### Q1: conda命令无法识别怎么办？
+**问题表现**：
+```
+'conda' 不是内部或外部命令，也不是可运行的程序
+```
+
+**解决方案**：
+1. **方案A - 初始化PowerShell**（推荐）
+   ```bash
+   # 打开Anaconda Prompt（管理员模式）
+   conda init powershell
+   # 重启终端
+   ```
+
+2. **方案B - 使用完整路径**
+   ```bash
+   # 找到你的Anaconda安装路径，通常在：
+   C:\ProgramData\Anaconda3\Scripts\conda.exe activate yolo_env
+   ```
+
+3. **方案C - 添加环境变量**
+   - 右键"此电脑" → 属性 → 高级系统设置 → 环境变量
+   - 在Path中添加：`C:\ProgramData\Anaconda3\Scripts`（根据实际路径调整）
+
+---
+
+### Q2: PyTorch安装失败或CUDA版本不匹配
+**问题表现**：
+```
+RuntimeError: CUDA out of memory
+或
+torch.cuda.is_available() 返回 False
+```
+
+**解决方案**：
+1. **检查CUDA版本**
+   ```bash
+   nvidia-smi  # 查看显卡驱动支持的最高CUDA版本
+   ```
+
+2. **安装匹配版本的PyTorch**
+   - 访问 [PyTorch官网](https://pytorch.org/get-started/locally/)
+   - 选择对应的CUDA版本
+   - 如果不确定，安装CPU版本保证可用：
+   ```bash
+   pip3 install torch torchvision torchaudio
+   ```
+
+3. **验证安装**
+   ```python
+   import torch
+   print(torch.__version__)
+   print(f"CUDA可用: {torch.cuda.is_available()}")
+   print(f"CUDA版本: {torch.version.cuda}")
+   ```
+
+---
+
+### Q3: requirements.txt 安装失败
+**问题表现**：
+```
+ERROR: Could not find a version that satisfies the requirement...
+```
+
+**解决方案**：
+1. **更新pip**
+   ```bash
+   python -m pip install --upgrade pip
+   ```
+
+2. **分步安装**
+   ```bash
+   # 先安装核心依赖
+   pip install ultralytics
+   pip install opencv-python
+   pip install numpy pandas matplotlib
+   
+   # 再安装其他依赖
+   pip install -r requirements.txt
+   ```
+
+3. **使用国内镜像**（中国用户）
+   ```bash
+   pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+   ```
+
+---
+
+## 📊 数据集问题
+
+### Q4: 数据集下载失败或无法访问Roboflow
+**解决方案**：
+1. **使用VPN**：Roboflow在某些地区可能访问受限
+2. **备用数据集**：
+   - 在[Kaggle](https://www.kaggle.com/)搜索"helmet detection"
+   - 在[COCO Dataset](https://cocodataset.org/)下载人体数据
+   - 使用开源数据集如[CrowdHuman](https://www.crowdhuman.org/)
+
+3. **自己标注数据**：
+   - 使用[LabelImg](https://github.com/heartexlabs/labelImg)
+   - 使用[CVAT](https://www.cvat.ai/)在线标注工具
+
+---
+
+### Q5: remap_labels.py 运行出错
+**问题表现**：
+```
+FileNotFoundError: [Errno 2] No such file or directory
+```
+
+**解决方案**：
+1. **检查文件夹路径**
+   ```python
+   # 在 remap_labels.py 顶部配置区，确保路径正确
+   DATASET_FOLDERS = [
+       'datasets/DS1_Helmet',  # 改成你实际的文件夹名
+       'datasets/DS2_Helmet',
+       'datasets/DS3_Human'
+   ]
+   ```
+
+2. **验证数据集结构**
+   ```
+   datasets/
+   ├── DS1_Helmet/
+   │   ├── train/
+   │   │   ├── images/
+   │   │   └── labels/
+   │   └── valid/
+   └── ...
+   ```
+
+3. **手动检查标签文件**
+   - 打开`.txt`标签文件，确保格式为：`class_id x_center y_center width height`
+
+---
+
+### Q6: 合并数据集后标签混乱
+**解决方案**：
+1. **运行验证脚本**
+   ```bash
+   python data_preparation/merge_and_verify.py
+   ```
+   查看输出的统计信息，确认类别数量正确
+
+2. **手动检查映射**
+   ```python
+   # 确保类别映射正确
+   CLASS_MAPPING = {
+       'head': 0,
+       'helmet': 1, 
+       'person': 2
+   }
+   ```
+
+---
+
+## 🏋️ 模型训练问题
+
+### Q7: CUDA out of memory 内存不足
+**问题表现**：
+```
+RuntimeError: CUDA out of memory. Tried to allocate X GiB
+```
+
+**解决方案**：
+1. **减小batch size**（最有效）
+   ```python
+   # 在 train.py 配置区
+   BATCH_SIZE = 8  # 从16降到8，甚至4或2
+   ```
+
+2. **使用更小的模型**
+   ```python
+   MODEL_SIZE = 'yolov8n'  # 从yolov8x改为yolov8n或yolov8s
+   ```
+
+3. **减小图像尺寸**
+   ```python
+   IMAGE_SIZE = 416  # 从640降到416
+   ```
+
+4. **启用混合精度训练**
+   ```python
+   # 在train()函数中添加
+   amp=True  # 自动混合精度
+   ```
+
+5. **清理GPU缓存**
+   ```python
+   import torch
+   torch.cuda.empty_cache()
+   ```
+
+---
+
+### Q8: 训练速度非常慢
+
+**优化方案**：
+1. **确认使用GPU**
+   ```python
+   import torch
+   print(f"使用设备: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU'}")
+   ```
+
+2. **增大batch size**（如果显存允许）
+   ```python
+   BATCH_SIZE = 32  # GPU显存充足时可以增大
+   ```
+
+3. **使用更快的数据加载**
+   ```python
+   WORKERS = 8  # 增加数据加载线程数（根据CPU核心数调整）
+   ```
+
+4. **关闭不必要的验证**
+   ```python
+   # 降低验证频率
+   val=True  # 如果训练慢，可以每几个epoch验证一次
+   ```
+
+---
+
+### Q9: 训练loss不下降或震荡严重
+**解决方案**：
+1. **调整学习率**
+   ```python
+   LR0 = 0.001  # 降低初始学习率（默认0.01）
+   ```
+
+2. **检查数据质量**
+   - 查看`runs/detect/train/`中的训练图像
+   - 确认标注框是否准确
+
+3. **增加训练轮次**
+   ```python
+   EPOCHS = 200  # 从100增加到200
+   PATIENCE = 100  # 提高早停耐心值
+   ```
+
+4. **使用预训练权重**
+   ```python
+   # 在train.py中确保使用预训练模型
+   model = YOLO('yolov8x.pt')  # 而不是从头训练
+   ```
+
+---
+
+### Q10: 训练中断后如何继续
+**解决方案**：
+```python
+# 在 train.py 中修改
+model = YOLO('runs/detect/yolov8x_<timestamp>/weights/last.pt')  # 加载上次的检查点
+results = model.train(
+    resume=True,  # 设置为True继续训练
+    # ... 其他参数保持不变
+)
+```
+
+---
+
+## 🎯 模型预测问题
+
+### Q11: 预测结果中文乱码
+**问题表现**：图像标注中中文显示为方框
+
+**解决方案**：
+```python
+# 在 predict.py 或 realtime_app.py 开头添加
+import matplotlib.pyplot as plt
+plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei']
+plt.rcParams['axes.unicode_minus'] = False
+```
+
+---
+
+### Q12: 实时检测帧率太低
+**问题表现**：摄像头画面卡顿，FPS < 10
+
+**解决方案**：
+1. **使用量化模型**
+   ```python
+   MODEL_PATH = 'best-complete.int8.onnx'  # ONNX模型更快
+   ```
+
+2. **降低分辨率**
+   ```python
+   # 在 realtime_app.py 中
+   results = model(frame, imgsz=416)  # 从640降到416
+   ```
+
+3. **跳帧处理**
+   ```python
+   frame_count = 0
+   while True:
+       frame_count += 1
+       if frame_count % 2 == 0:  # 每2帧处理一次
+           results = model(frame)
+   ```
+
+4. **使用更快的模型**
+   ```python
+   MODEL_PATH = 'best-light.pt'  # 使用YOLOv8n轻量模型
+   ```
+
+---
+
+### Q13: 模型检测效果差
+**可能原因和解决方案**：
+
+1. **数据集质量问题**
+   - 检查训练图像是否与测试场景相似
+   - 确认标注是否准确
+
+2. **置信度阈值过高**
+   ```python
+   # 在 predict.py 中调整
+   results = model(source, conf=0.25)  # 降低置信度阈值（默认0.5）
+   ```
+
+3. **NMS阈值调整**
+   ```python
+   results = model(source, iou=0.5)  # 调整IoU阈值
+   ```
+
+4. **需要更多训练**
+   - 增加训练轮次
+   - 使用数据增强
+
+---
+
+## 🚀 模型部署问题
+
+### Q14: ONNX模型转换失败
+**解决方案**：
+```bash
+# 确保安装所有依赖
+pip install onnx onnxruntime onnx-tf tensorflow-cpu
+
+# 如果还是失败，尝试单独导出
+python -c "from ultralytics import YOLO; model = YOLO('best.pt'); model.export(format='onnx')"
+```
+
+---
+
+### Q15: 摄像头无法打开
+**问题表现**：
+```
+Error: Could not open camera
+```
+
+**解决方案**：
+1. **检查摄像头索引**
+   ```python
+   # 在 realtime_app.py 中尝试不同索引
+   cap = cv2.VideoCapture(0)  # 尝试0, 1, 2...
+   ```
+
+2. **检查权限**
+   - Windows：设置 → 隐私 → 相机 → 允许应用访问相机
+
+3. **关闭其他占用摄像头的程序**
+   - 关闭视频会议软件、其他Python脚本等
+
+---
+
+## 💾 文件和路径问题
+
+### Q16: 找不到模型文件
+**解决方案**：
+```python
+# 使用绝对路径
+import os
+MODEL_PATH = os.path.abspath('runs/detect/yolov8x_20240315/weights/best.pt')
+
+# 或者使用相对路径
+MODEL_PATH = os.path.join(os.path.dirname(__file__), 'runs/detect/.../weights/best.pt')
+```
+
+---
+
+### Q17: 路径中包含中文导致错误
+**解决方案**：
+- 避免在项目路径中使用中文
+- 将项目移动到纯英文路径，如：`D:/Projects/YOLOv8-HumanDetection`
+
+---
+
+## 📚 学习建议
+
+### Q18: 我是完全的新手，该如何开始？
+**推荐学习路径**：
+
+1. **第1天**：环境搭建 + 快速体验预训练模型
+2. **第2-3天**：理解YOLOv8原理，运行predict.py测试
+3. **第4-5天**：下载和整理数据集
+4. **第6-7天**：使用小数据集（1000张）训练YOLOv8n模型
+5. **第8-10天**：完整训练YOLOv8x模型
+6. **第11天**：部署实时应用
+7. **第12天+**：尝试自定义数据集
+
+---
+
+### Q19: 如何使用自己的数据集？
+**步骤**：
+1. 准备图像文件
+2. 使用LabelImg或CVAT标注（YOLO格式）
+3. 组织成以下结构：
+   ```
+   my_dataset/
+   ├── images/
+   │   ├── train/
+   │   └── val/
+   └── labels/
+       ├── train/
+       └── val/
+   ```
+4. 创建`data.yaml`：
+   ```yaml
+   path: ./my_dataset
+   train: images/train
+   val: images/val
+   names:
+     0: class1
+     1: class2
+   ```
+5. 修改`train.py`中的`DATA_PATH`
+
+---
+
+## 🆘 仍然无法解决？
+
+如果以上方案都无法解决你的问题：
+
+1. **提交Issue**：在[GitHub Issues](https://github.com/xzyango1/YOLOv8-HumanDetection/issues)详细描述问题
+2. **查看官方文档**：[Ultralytics YOLOv8文档](https://docs.ultralytics.com/)
+3. **加入社区**：Ultralytics Discord或相关论坛寻求帮助
+
+**提问时请包含**：
+- 操作系统和Python版本
+- 完整的错误信息
+- 你已经尝试过的解决方案
+- 相关配置文件和代码片段
+
 ---
 
 ## 🤝 致谢
