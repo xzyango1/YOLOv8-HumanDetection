@@ -3,7 +3,7 @@
 <div align="center">
   <img src="assets/demo.gif" width="80%">
 </div>
-*一个由本项目V2.0终极模型驱动的实时检测效果演示。*
+**一个由本项目V2.0模型驱动的实时检测效果演示。**
 
 *原视频：https://www.bilibili.com/video/BV1sdKizVE2g*
 
@@ -59,9 +59,9 @@
     *   ✅ **极快的速度**：非常适合需要高帧率的实时应用。
     *   ✅ **头部/安全帽专家**：在识别是否佩戴安全帽这个核心任务上，精度极高。
     *   ❌ **无法识别完整的人**：由于训练数据问题，它几乎不认识`person`这个类别。
-*   **格式**: `.pt`，这是PyTorch的原生格式。
+*   **格式**: `.pt`，这是PyTorch的原生格式，训练完的模型都会以`.pt`文件的形式出现。
 
-### 2. `best-complete.int8.onnx` (V2.0 终极版综合安全检测器)
+### 2. `best-complete.int8.onnx` (V2.0 完整版综合安全检测器)
 *   **训练背景**: 使用`YOLOv8x`（Extra-Large）这个最强大的模型，在一个由**三个**数据集融合而成的、近**3万张**图片的终极数据集上，通过智能早停机制，训练了43轮（最佳效果出现在第18轮）。
 *   **性能数据**:
     *   **`mAP50-95` (总分)**: **`0.482`** (比V1.0提升了**21%**！)
@@ -159,6 +159,9 @@ pip install -r requirements.txt
 *   **数据集2 (头部安全)**: [Safety Helmet by mohammad-mehdi-tamehri](https://universe.roboflow.com/mohammad-mehdi-tamehri/safety-helmet-itjyo)
 *   **数据集3 (人体)**: [Human by human-urngn](https://universe.roboflow.com/human-urngn/human-wg4jz)
 
+合并这三个数据集进行训练将会得到一个同时识别头部与人体的物体检测模型。
+你也可以在[Roboflow Universe](https://universe.roboflow.com/)上搜索自己想要的数据集，实现其他效果。
+
 ### 2. 组织文件结构
 在你的项目根目录下，新建一个`datasets`文件夹。将下载好的三个数据集解压到其中，并为它们起清晰的英文名（例如`DS1_Helmet`, `DS2_Helmet`, `DS3_Human`）。
 
@@ -180,7 +183,7 @@ python data_preparation/merge_and_verify.py
 
 ## 🧠 第二步：模型训练
 
-现在，我们将使用准备好的终极数据集，来训练一个强大的`yolov8x`（默认）模型。
+现在，我们将使用准备好的数据集，来训练一个强大的`yolov8x`（默认）模型。
 
 1.  **打开 `train.py` 文件。**
 2.  在文件顶部的“配置区”，你可以根据自己的需求调整训练参数（如`EPOCHS`训练轮次等）。对于初次尝试，如果没有完全理解各个配置，建议保持默认设置。
@@ -192,7 +195,7 @@ python data_preparation/merge_and_verify.py
 
 **非常重要**：你不需要一次性跑完！可以随时在终端按`Ctrl+C`来中断训练，程序会自动保存当前为止最好的模型。即使只训练几个小时，你也能得到一个效果不错的模型！*
 
-第一次训练也可以使用`yolov8n`小模型，`5000`张图片的数据集（如只加载第一个链接所述数据集，这样可以暂时跳过数据集合并步骤），以快速验证配置可行性并得到一个效果尚可的安全帽识别模型，训练时长将约1小时以内，适合快速见到成果。
+第一次训练也可以使用`yolov8n`小模型，`5000`张图片的数据集（如只加载第一个链接所述数据集，这样可以暂时跳过数据集合并步骤），以快速验证配置可行性并得到一个效果尚可的安全帽识别模型，训练时长将在约1小时以内，适合快速见到成果。
 
 ---
 
@@ -223,7 +226,7 @@ python data_preparation/merge_and_verify.py
     ```bash
     python realtime_app.py
     ```
-*一个窗口将会弹出，显示你摄像头的实时画面，并开始进行智能检测！按键盘上的`q`键可以退出程序。*
+*一个窗口将会弹出，显示你摄像头的实时画面，并开始进行智能检测！按键盘上的`q`键可以退出程序。（英文键盘在窗口里输入）*
 
 ---
 
@@ -253,4 +256,5 @@ python data_preparation/merge_and_verify.py
 
 ---
 *由 [xzyango1](https://github.com/xzyango1) 创建与维护*
+
 *如果你觉得这个项目对你有帮助，请给一个 Star ⭐ 吧！秋梨膏！*
