@@ -128,7 +128,20 @@ cd YOLOv8-HumanDetection
 pip install -r requirements.txt
 ```
 
-### 5. 安装PyTorch (最关键的一步！)
+### 5. 安装FFmpeg以实现音画同步
+
+为了让最终生成的预测视频能够包含原始音轨，本项目使用了一个强大的外部工具`FFmpeg`。
+
+**最简单的安装方式 (Windows 10/11):**
+打开你的终端，运行以下命令。Windows包管理器`winget`会自动帮你完成所有安装和配置：
+```bash
+winget install Gyan.FFmpeg
+```
+安装完成后，请**重启你的终端或VS Code**，然后运行`ffmpeg -version`。如果你能看到版本信息，就证明安装成功了！
+
+*如果`winget`命令无效，请参考[这篇教程](https://www.wikihow.com/Install-FFmpeg-on-Windows)进行手动安装和环境变量配置。*
+
+### 6. 安装PyTorch (最关键的一步！)
 
 深度学习的核心计算库PyTorch需要根据你的硬件进行单独安装。
 

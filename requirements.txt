@@ -1,5 +1,6 @@
-# requirements.txt (精简后)
+# requirements.txt
 # 核心依赖库
 # 注意：torch需要用户根据自己的CUDA版本另行安装，请在README中说明。
 ultralytics
 opencv-python
+ffmpeg-python
