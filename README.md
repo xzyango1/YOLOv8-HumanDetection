@@ -38,7 +38,7 @@
     # 选项1: 轻量级模型 (速度快, 仅擅长头部/安全帽)
     MODEL_PATH = 'best-light.pt'
 
-    # 选项2: 终极版ONNX模型 (精度高, 全能型)
+    # 选项2: 完整版ONNX模型 (精度高, 全能型)
     # MODEL_PATH = 'best-complete.int8.onnx' 
     ```
 5.  **运行脚本**，即可看到预训练模型对`assets/test_video.mp4`的检测效果！

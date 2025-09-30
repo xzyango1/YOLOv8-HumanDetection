@@ -8,12 +8,13 @@ import shutil
 # --- 配置区 ---
 # 在这里修改所有预测参数
 
-# 1. 自动构建模型路径
-EXPERIMENT_FOLDER = 'ultimate_model_aggressive_v28' # ⚠️ 请务必改为您真实的实验文件夹名称！
-MODEL_PATH = f'runs/detect/{EXPERIMENT_FOLDER}/weights/best.pt'
+# 1. 指定模型路径
+# 默认使用下载的预训练模型。请确保 'best-complete.int8.onnx' 文件已放置在项目根目录。
+MODEL_PATH = 'best-complete.int8.onnx'
 
-# 或者，如果你想直接使用仓库里的预训练模型，请取消下面一行的注释
-# MODEL_PATH = 'best-complete.int8.onnx'
+# [备选] 如果你想使用自己训练的模型，请注释掉上面一行，并使用下面这段：
+# EXPERIMENT_FOLDER = 'your_experiment_folder_name' # ⚠️ 请改为您真实的实验文件夹名称！
+# MODEL_PATH = f'runs/detect/{EXPERIMENT_FOLDER}/weights/best.pt'
 
 # 2. 指定您要进行预测的原始视频文件路径
 SOURCE_PATH = 'assets/test_video.mp4'
