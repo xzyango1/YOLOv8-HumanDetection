@@ -24,7 +24,7 @@ def main():
     print("--- 开始模型训练 ---")
     
     # 加载预训练模型
-    model = YOLO('yolov8x.pt') # 你也可以换成 'yolov8n.pt', 'yolov8s.pt', 'yolov8m.pt', 'yolov8l.pt' 从‘n'ano到‘x’逐渐变大变强, 但也更占显存和更慢
+    model = YOLO('yolov8x.pt') # 你也可以换成 'yolov8n.pt', 'yolov8s.pt', 'yolov8m.pt', 'yolov8l.pt' 从'n'到'x'逐渐变大变强, 但也更占显存和更慢
     print(f"模型 '{model.model_name}' 已加载。")
 
     # 开始训练
