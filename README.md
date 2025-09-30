@@ -150,13 +150,13 @@ winget install Gyan.FFmpeg
     
     *一个常见的适用于CUDA 12.1的命令示例：*
     ```bash
-    pip3 install torch torchvision torchiudio --index-url https://download.pytorch.org/whl/cu121
+    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
     ```
 
 *   **选项B：如果你的电脑只有CPU，或GPU安装失败 (仅保证运行)**：
     如果你不确定自己的显卡配置，或者GPU版本安装失败，不用担心！CPU版本虽然速度较慢，但**保证可以运行**本项目的所有代码。
     ```bash
-    pip3 install torch torchvision torchiudio
+    pip3 install torch torchvision torchaudio
     ```
 
 至此，你的开发环境已经完美配置完毕！
