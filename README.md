@@ -165,13 +165,13 @@ winget install Gyan.FFmpeg
 
 ## 📦 第一步：数据准备
 
-一个强大的模型，离不开高质量、大规模的数据。在这个阶段，我们将学习如何将三个不同的数据集融合为一个终极数据集。
+一个强大的模型，离不开高质量、大规模的数据。在这个阶段，我们将学习如何将三个不同的数据集融合为一个大型数据集。
 
 ### 1. 下载原始数据集
 本项目的数据集托管在[Roboflow Universe](https://universe.roboflow.com/)上。请分别从以下链接下载这三个数据集（选择`YOLOv8`格式导出）：
 
-*   **数据集1 (头部安全)**: [Safety Helmet Dataset by andrewyolo](https://universe.roboflow.com/andrewyolo/safety-helmet-wqidg)
-*   **数据集2 (头部安全)**: [Safety Helmet by mohammad-mehdi-tamehri](https://universe.roboflow.com/mohammad-mehdi-tamehri/safety-helmet-itjyo)
+*   **数据集1 (头部安全帽)**: [Safety Helmet Dataset by andrewyolo](https://universe.roboflow.com/andrewyolo/safety-helmet-wqidg)
+*   **数据集2 (头部安全帽)**: [Safety Helmet by mohammad-mehdi-tamehri](https://universe.roboflow.com/mohammad-mehdi-tamehri/safety-helmet-itjyo)
 *   **数据集3 (人体)**: [Human by human-urngn](https://universe.roboflow.com/human-urngn/human-wg4jz)
 
 合并这三个数据集进行训练将会得到一个同时识别头部与人体的物体检测模型。
