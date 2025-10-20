@@ -192,7 +192,7 @@ python data_preparation/remap_labels.py
 # 第二步：将所有数据集的文件合并，并进行数量验证
 python data_preparation/merge_and_verify.py
 ```
-*运行成功后，你会在`datasets/`目录下得到一个名为`ULTIMATE_DATASET`的最终数据集文件夹。*
+*运行成功后，你会在`datasets/`目录下得到一个名为`ULTIMATE_DATASET`的最终数据集文件夹。之后将数据集3 (人体)数据集中的`data.yaml`复制到新的数据集文件夹当中。*
 
 ---
 
